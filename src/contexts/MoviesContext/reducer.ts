@@ -4,6 +4,7 @@ export const InitialState: MoviesTypes.MoviesState = {
   status: 'empty',
   dispatch: () => null,
   getMovieCredits: () => null,
+  searchMovies: () => null,
 };
 
 export const moviesReducer = (

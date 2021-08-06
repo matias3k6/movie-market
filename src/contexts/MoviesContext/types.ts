@@ -54,6 +54,7 @@ namespace MoviesTypes {
     status: string;
     dispatch: Dispatch<Action>;
     getMovieCredits: (id: number, title: string, path: string) => void;
+    searchMovies: (query: string) => void;
     error?: string;
     data?: SearchResponse;
     genres?: Genre[];

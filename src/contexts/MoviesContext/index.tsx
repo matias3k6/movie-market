@@ -1,6 +1,6 @@
 import { createContext, Reducer, useEffect, useReducer } from 'react';
 import { ReactNode } from 'react';
-import { getCredits, getGenres } from 'service';
+import { getCredits, getGenres, getMovies } from 'service';
 import { InitialState, moviesReducer } from './reducer';
 import MoviesTypes from './types';
 
@@ -11,11 +11,27 @@ export const MoviesProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const [state, dispatch] = useReducer<
-    Reducer<MoviesTypes.MoviesState, MoviesTypes.Action>
-  >(moviesReducer, InitialState);
+  const [state, dispatch] = useReducer<Reducer<MoviesTypes.MoviesState, MoviesTypes.Action>>(moviesReducer, InitialState);
 
-  const getMovieCredits = (id: number, title: string, poster?: string): void => {
+  const searchMovies = (query: string): void => {
+    dispatch({ type: 'request' });
+    getMovies(query)
+      .then((res) => {
+        dispatch({
+          type: 'success',
+          results: res.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({ type: 'failure', error });
+      });
+  };
+
+  const getMovieCredits = (
+    id: number,
+    title: string,
+    poster?: string
+  ): void => {
     getCredits(id).then((res) => {
       dispatch({
         type: 'success',
@@ -44,7 +60,8 @@ export const MoviesProvider = ({
       value={{
         ...state,
         dispatch,
-        getMovieCredits
+        getMovieCredits,
+        searchMovies
       }}
     >
       {children}
