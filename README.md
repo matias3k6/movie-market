@@ -7,7 +7,11 @@ This is App let you search for a movie and get some details.
 ### Clone the project
 
 ```
-git clone [...]
+git clone https://github.com/matias3k6/movie-market.git
+```
+or
+```
+git clone git@github.com:matias3k6/movie-market.git
 ```
 
 ### Install dependencies
