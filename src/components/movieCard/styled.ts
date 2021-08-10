@@ -23,6 +23,6 @@ export const StyledContentWrapper = withStyles(({ spacing }: Theme) => ({
 
 export const StyledCardMedia = withStyles({
   root: {
-    height: 420,
+    height: 375,
   },
 })(CardMedia);
