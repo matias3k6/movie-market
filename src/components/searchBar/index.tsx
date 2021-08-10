@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useContext, useState } from 'react';
+import Close from '@material-ui/icons/Close';
 import { MoviesContext } from 'contexts/MoviesContext';
 import {
   StyledSearchBox,
@@ -6,6 +7,7 @@ import {
   StyledSearchWrapper,
 } from './styled';
 import debounce from 'utils/debounce';
+import { IconButton } from '@material-ui/core';
 
 const SearchBar = (): JSX.Element => {
   const { searchMovies, status } = useContext(MoviesContext);
@@ -16,6 +18,10 @@ const SearchBar = (): JSX.Element => {
     setQuery(event.target.value);
   };
 
+  const handleClean = (): void => {
+    setQuery('');
+  };
+
   useEffect(() => {
     if (query.length > 2 && status === 'success') debouncedSearch(query);
   }, [query]);
@@ -24,9 +30,17 @@ const SearchBar = (): JSX.Element => {
     <StyledSearchWrapper>
       <StyledSearchBox>
         <StyledSearchTextField
-          placeholder={'Type something here...'}
+          placeholder={'Search a movie...'}
           color={'primary'}
           onChange={handleChange}
+          value={query}
+          endAdornment={
+            query.length > 0 && (
+              <IconButton onClick={handleClean}>
+                <Close fontSize={'large'} />
+              </IconButton>
+            )
+          }
         />
       </StyledSearchBox>
     </StyledSearchWrapper>
