@@ -1,35 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-  Box,
-  Card,
-  CircularProgress,
-  Grid,
-  Modal,
-  Typography,
-} from '@material-ui/core';
+import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
+import MovieModal from 'components/movieModal';
 import MovieCard from 'components/movieCard';
 import { MoviesContext } from 'contexts/MoviesContext';
 import MoviesTypes from 'contexts/MoviesContext/types';
-import {
-  StyledGridResult,
-  StyledBoxNoResult,
-  ModalWrapper,
-  ListCast,
-} from './styled';
+import { StyledGridResult, StyledBoxNoResult } from './styled';
 
 interface MoviesState extends MoviesTypes.Genre {
   results?: MoviesTypes.SearchResult[];
-}
-
-interface Cast {
-  known_for_department: string;
-  name: string;
-}
-
-interface Modal {
-  open: boolean;
-  title: string;
-  cast: Cast[] | [];
 }
 
 const SearchResult = (): JSX.Element => {
@@ -101,43 +79,13 @@ const SearchResult = (): JSX.Element => {
           {status === 'loading' && <CircularProgress size={48} />}
         </StyledBoxNoResult>
       )}
-      {movieDetail ? (
-        <Modal open={movieDetail.open} onClose={handleClose}>
-          <ModalWrapper>
-            <Card>
-              <Box padding={2}>
-                <Typography variant={'h4'}>{movieDetail.title}</Typography>
-              </Box>
-              <Box
-                display={'flex'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                paddingLeft={8}
-              >
-                <img
-                  src={
-                    movieDetail.poster
-                      ? `https://image.tmdb.org/t/p/w500/${movieDetail.poster}`
-                      : 'https://via.placeholder.com/254x380?text=No Image'
-                  }
-                  alt={movieDetail.title}
-                  height={380}
-                />
-                <ListCast>
-                  <Typography variant={'h5'}>Casting:</Typography>
-                  {movieDetail.cast.map((item) => (
-                    <span
-                      key={item.name}
-                    >{`${item.name} | ${item.known_for_department}`}</span>
-                  ))}
-                </ListCast>
-              </Box>
-            </Card>
-          </ModalWrapper>
-        </Modal>
-      ) : (
-        ''
-      )}
+      <MovieModal
+        open={movieDetail.open}
+        title={movieDetail.title}
+        image={movieDetail.poster}
+        onClose={handleClose}
+        cast={movieDetail.cast}
+      />
     </>
   );
 };
