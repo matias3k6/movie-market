@@ -1,11 +1,10 @@
 import { Typography } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
+import Stars from 'components/stars';
 import MoviesTypes from 'contexts/MoviesContext/types';
 import {
   StyledContentWrapper,
   StyledMovieCard,
   StyledCardMedia,
-  StarsBox,
 } from './styled';
 
 interface MovieCardProps extends MoviesTypes.SearchResult {
@@ -33,12 +32,7 @@ const MovieCard = ({
       <StyledContentWrapper>
         <Typography variant={'h6'}>{title}</Typography>
         <Typography variant={'subtitle2'}>{release_date}</Typography>
-        <StarsBox>
-          <StarIcon color={'primary'} />
-          <Typography variant={'caption'}>
-            {vote_average} ({vote_count} votes)
-          </Typography>
-        </StarsBox>
+        <Stars vote_count={vote_count} vote_average={vote_average} />
       </StyledContentWrapper>
     </StyledMovieCard>
   );
