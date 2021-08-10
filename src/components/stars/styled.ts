@@ -26,3 +26,14 @@ export const StyledCardMedia = withStyles({
     height: 420,
   },
 })(CardMedia);
+
+export const StarsBox = withStyles(({ spacing }: Theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: spacing(1),
+    '& > *': {
+      marginRight: spacing(1),
+    },
+  },
+}))(Box);
