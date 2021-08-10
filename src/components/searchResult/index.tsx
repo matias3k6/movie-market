@@ -22,8 +22,8 @@ const SearchResult = (): JSX.Element => {
     });
   };
 
-  const handleModal = (id: number, title: string, poster: string): void => {
-    getMovieCredits(id, title, poster);
+  const handleModal = ({ id, ...rest }: MoviesTypes.SearchResult): void => {
+    getMovieCredits({ id, ...rest });
   };
 
   useEffect(() => {
@@ -53,16 +53,7 @@ const SearchResult = (): JSX.Element => {
                 <StyledGridResult container>
                   {genre.results.map((card) => (
                     <Grid key={card.id} item>
-                      <MovieCard
-                        {...card}
-                        onClick={() =>
-                          handleModal(
-                            card.id,
-                            card.title,
-                            card.poster_path || ''
-                          )
-                        }
-                      />
+                      <MovieCard {...card} onClick={() => handleModal(card)} />
                     </Grid>
                   ))}
                 </StyledGridResult>
@@ -79,13 +70,7 @@ const SearchResult = (): JSX.Element => {
           {status === 'loading' && <CircularProgress size={48} />}
         </StyledBoxNoResult>
       )}
-      <MovieModal
-        open={movieDetail.open}
-        title={movieDetail.title}
-        image={movieDetail.poster}
-        onClose={handleClose}
-        cast={movieDetail.cast}
-      />
+      <MovieModal onClose={handleClose} {...movieDetail} />
     </>
   );
 };

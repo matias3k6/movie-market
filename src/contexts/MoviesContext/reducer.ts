@@ -6,8 +6,7 @@ export const InitialState: MoviesTypes.MoviesState = {
   getMovieCredits: () => null,
   searchMovies: () => null,
   movieDetail: {
-    title: '',
-    poster: '',
+    id: 0,
     open: false,
     cast: [],
   },

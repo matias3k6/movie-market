@@ -1,61 +1,93 @@
-import { Box, Card, Modal, Typography } from '@material-ui/core';
-import { ModalWrapper, ListCast } from './styled';
+import { Box, Dialog, IconButton, Typography } from '@material-ui/core';
+import MoviesTypes from 'contexts/MoviesContext/types';
+import Close from '@material-ui/icons/Close';
+import { ListCast, DialogCloseButton, DialogWrapper } from './styled';
+import Stars from 'components/stars';
+import { useContext } from 'react';
+import { MoviesContext } from 'contexts/MoviesContext';
 
 interface Cast {
   known_for_department: string;
   name: string;
 }
 
-interface MovieModalProps {
-  open: boolean;
-  title: string;
+interface MovieDialogProps extends MoviesTypes.MovieDetail {
   onClose: () => void;
-  cast: Cast[];
-  image?: string;
 }
 
-const MovieModal = ({
+const MovieDialog = ({
   open,
   title,
   onClose,
-  image,
-  cast
-}: MovieModalProps): JSX.Element => {
+  poster_path,
+  cast,
+  overview,
+  release_date,
+  vote_average = 0,
+  vote_count = 0,
+  genre_ids,
+}: MovieDialogProps): JSX.Element => {
+  const { genres } = useContext(MoviesContext);
+  const filterGenres = genres?.filter((genre) => genre_ids?.includes(genre.id));
+  const mapGenres = filterGenres?.map((gender) => gender.name);
+  const filterDepartament = cast.map((item) => item.known_for_department);
+  const cleanDuplicatedDepartament = filterDepartament.filter(
+    (v: string, i: number) => filterDepartament.indexOf(v) === i
+  );
+  const customizeData = cleanDuplicatedDepartament.map(
+    (departament: string) => ({
+      departament,
+      people: cast.filter(
+        (person) => person.known_for_department === departament
+      ),
+    })
+  );
+
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalWrapper>
-        <Card>
-          <Box padding={2}>
-            <Typography variant={'h4'}>{title}</Typography>
+    <Dialog open={open} onClose={onClose} transitionDuration={0} fullScreen>
+      <DialogWrapper>
+        <DialogCloseButton>
+          <IconButton onClick={onClose}>
+            <Close fontSize={'large'} />
+          </IconButton>
+        </DialogCloseButton>
+        <Typography variant={'h4'}>{title}</Typography>
+        <Typography variant={'subtitle2'}>{release_date}</Typography>
+        <Typography variant={'subtitle2'}>
+          Genres: {mapGenres?.join(', ')}.
+        </Typography>
+        <Stars vote_count={vote_count} vote_average={vote_average} />
+        <Box display={'flex'} marginTop={4} marginBottom={4}>
+          <img
+            src={
+              poster_path
+                ? `https://image.tmdb.org/t/p/w500/${poster_path}`
+                : 'https://via.placeholder.com/254x380?text=No Image'
+            }
+            alt={title}
+            height={380}
+          />
+          <Box marginRight={4} marginLeft={4}>
+            <Typography>{overview}</Typography>
           </Box>
-          <Box
-            display={'flex'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            paddingLeft={8}
-          >
-            <img
-              src={
-                image
-                  ? `https://image.tmdb.org/t/p/w500/${image}`
-                  : 'https://via.placeholder.com/254x380?text=No Image'
-              }
-              alt={title}
-              height={380}
-            />
-            <ListCast>
-              <Typography variant={'h5'}>Casting:</Typography>
-              {cast.map((item: Cast) => (
-                <span
-                  key={item.name}
-                >{`${item.name} | ${item.known_for_department}`}</span>
-              ))}
-            </ListCast>
-          </Box>
-        </Card>
-      </ModalWrapper>
-    </Modal>
+        </Box>
+        <div>
+          <Typography variant={'h5'}>Casting:</Typography>
+
+          {customizeData.map((item) => (
+            <Box key={item.departament}>
+              <Typography>{item.departament}</Typography>
+              <ListCast component={'ul'}>
+                {item.people.map((person: Cast) => (
+                  <li key={person.name}>{person.name}</li>
+                ))}
+              </ListCast>
+            </Box>
+          ))}
+        </div>
+      </DialogWrapper>
+    </Dialog>
   );
 };
 
-export default MovieModal;
+export default MovieDialog;

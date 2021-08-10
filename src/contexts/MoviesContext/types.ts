@@ -43,17 +43,16 @@ namespace MoviesTypes {
     error?: string;
   }
 
-  export interface MovieDetail {
-    title: string;
+  export interface MovieDetail extends Partial<SearchResult> {
+    id: number,
     open: boolean;
     cast: Cast[];
-    poster?: string;
   }
 
   export interface MoviesState {
     status: string;
     dispatch: Dispatch<Action>;
-    getMovieCredits: (id: number, title: string, path: string) => void;
+    getMovieCredits: (props: SearchResult) => void;
     searchMovies: (query: string) => void;
     movieDetail: MovieDetail;
     error?: string;

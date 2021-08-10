@@ -11,7 +11,9 @@ export const MoviesProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const [state, dispatch] = useReducer<Reducer<MoviesTypes.MoviesState, MoviesTypes.Action>>(moviesReducer, InitialState);
+  const [state, dispatch] = useReducer<
+    Reducer<MoviesTypes.MoviesState, MoviesTypes.Action>
+  >(moviesReducer, InitialState);
 
   const searchMovies = (query: string): void => {
     dispatch({ type: 'request' });
@@ -27,17 +29,12 @@ export const MoviesProvider = ({
       });
   };
 
-  const getMovieCredits = (
-    id: number,
-    title: string,
-    poster?: string
-  ): void => {
+  const getMovieCredits = ({ id, ...rest }: MoviesTypes.SearchResult): void => {
     getCredits(id).then((res) => {
       dispatch({
         type: 'success',
         movieDetail: {
-          title,
-          poster,
+          ...rest,
           open: true,
           cast: res.data.cast.map((item: MoviesTypes.Cast) => ({
             name: item.name,
@@ -61,7 +58,7 @@ export const MoviesProvider = ({
         ...state,
         dispatch,
         getMovieCredits,
-        searchMovies
+        searchMovies,
       }}
     >
       {children}

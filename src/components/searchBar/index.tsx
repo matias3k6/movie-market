@@ -10,7 +10,7 @@ import debounce from 'utils/debounce';
 const SearchBar = (): JSX.Element => {
   const { searchMovies, status } = useContext(MoviesContext);
   const [query, setQuery] = useState<string>('');
-  const debouncedSearch = debounce(searchMovies, 2000);
+  const debouncedSearch = debounce(searchMovies, 250);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setQuery(event.target.value);
