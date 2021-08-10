@@ -5,6 +5,12 @@ export const InitialState: MoviesTypes.MoviesState = {
   dispatch: () => null,
   getMovieCredits: () => null,
   searchMovies: () => null,
+  movieDetail: {
+    title: '',
+    poster: '',
+    open: false,
+    cast: [],
+  },
 };
 
 export const moviesReducer = (
@@ -20,7 +26,9 @@ export const moviesReducer = (
         status: 'success',
         data: action.results ? action.results : state.data,
         genres: action.genres ? action.genres : state.genres,
-        movieDetail: action.movieDetail ? action.movieDetail : state.movieDetail
+        movieDetail: action.movieDetail
+          ? action.movieDetail
+          : state.movieDetail,
       };
     case 'failure':
       return { ...state, status: 'error', error: action.error };
